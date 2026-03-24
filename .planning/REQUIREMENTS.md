@@ -15,11 +15,11 @@
 
 ### Marina Map
 
-- [ ] **MAP-01**: Interactive SVG marina map displays 4 docks (A, B, C, D) with 60 total slips
-- [ ] **MAP-02**: Slips are color-coded by status: available (green), occupied (blue), reserved (yellow), maintenance (red)
-- [ ] **MAP-03**: Clicking a slip opens a details panel with vessel info, booking history, and actions
+- [x] **MAP-01**: Interactive SVG marina map displays 4 docks (A, B, C, D) with 60 total slips
+- [x] **MAP-02**: Slips are color-coded by status: available (green), occupied (blue), reserved (yellow), maintenance (red)
+- [x] **MAP-03**: Clicking a slip opens a details panel with vessel info, booking history, and actions
 - [x] **MAP-04**: Map is data-driven (dock/slip layout from database, not hardcoded SVG)
-- [ ] **MAP-05**: Map is responsive and works on tablet screens
+- [x] **MAP-05**: Map is responsive and works on tablet screens
 
 ### Slip Management
 
@@ -73,7 +73,7 @@
 - [x] **UX-01**: Ocean/nautical color palette (navy blues, teals, seafoam, whites)
 - [x] **UX-02**: Clean, modern, professional UI using shadcn/ui components
 - [x] **UX-03**: Responsive design -- works on desktop and tablet
-- [ ] **UX-04**: Marina map is the centerpiece -- large, prominent, interactive
+- [x] **UX-04**: Marina map is the centerpiece -- large, prominent, interactive
 - [ ] **UX-05**: Role-appropriate navigation and layout for each user type
 
 ## v2 Requirements
@@ -106,11 +106,11 @@
 | AUTH-03 | Phase 1 | Complete |
 | AUTH-04 | Phase 1 | Complete |
 | AUTH-05 | Phase 1 | Complete |
-| MAP-01 | Phase 2 | Pending |
-| MAP-02 | Phase 2 | Pending |
-| MAP-03 | Phase 2 | Pending |
+| MAP-01 | Phase 2 | Complete |
+| MAP-02 | Phase 2 | Complete |
+| MAP-03 | Phase 2 | Complete |
 | MAP-04 | Phase 2 | Complete |
-| MAP-05 | Phase 2 | Pending |
+| MAP-05 | Phase 2 | Complete |
 | SLIP-01 | Phase 1 | Complete |
 | SLIP-02 | Phase 1 | Complete |
 | SLIP-03 | Phase 2 | Complete |
@@ -143,7 +143,7 @@
 | UX-01 | Phase 1 | Complete |
 | UX-02 | Phase 1 | Complete |
 | UX-03 | Phase 1 | Complete |
-| UX-04 | Phase 2 | Pending |
+| UX-04 | Phase 2 | Complete |
 | UX-05 | Phase 4 | Pending |
 
 **Coverage:**
