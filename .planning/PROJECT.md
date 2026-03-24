@@ -12,7 +12,9 @@ Marina operators can visually manage their slips, bookings, and boaters through 
 
 ### Validated
 
-(None yet — ship to validate)
+- ✓ Role-based auth: admin, dock_staff, boater — Validated in Phase 1
+- ✓ Demo accounts with realistic seed data (60 slips, 21 boaters, 3 months history) — Validated in Phase 1
+- ✓ Ocean/nautical design palette, responsive, tablet-friendly — Validated in Phase 1
 
 ### Active
 
@@ -29,9 +31,6 @@ Marina operators can visually manage their slips, bookings, and boaters through 
 - [ ] Submit maintenance requests for occupied slips
 - [ ] Admin dashboard: occupancy rates, revenue overview, arrivals/departures
 - [ ] Waitlist management
-- [ ] Role-based auth: admin, dock_staff, boater
-- [ ] Demo accounts with realistic seed data (60 slips, 15-20 boaters, 3 months history)
-- [ ] Ocean/nautical design palette, responsive, tablet-friendly
 
 ### Out of Scope
 
@@ -65,10 +64,12 @@ Marina operators can visually manage their slips, bookings, and boaters through 
 
 | Decision | Rationale | Outcome |
 |----------|-----------|---------|
-| Next.js + SQLite/Drizzle stack | Brief suggests it, fast local dev, no external DB needed | — Pending |
+| Next.js + SQLite/Drizzle stack | Brief suggests it, fast local dev, no external DB needed | ✓ Good |
 | SVG-based marina map | Better interactivity and styling than Canvas for this use case | — Pending |
-| shadcn/ui component library | Professional look, consistent with FonnIT showcase standards | — Pending |
-| Cookie-based auth with demo accounts | Simple, no external auth provider needed for showcase | — Pending |
+| shadcn/ui component library | Professional look, consistent with FonnIT showcase standards | ✓ Good |
+| Cookie-based auth with demo accounts | Simple, no external auth provider needed for showcase | ✓ Good |
+| iron-session for sessions | httpOnly cookies, works in Server Components and middleware | ✓ Good |
+| OKLCH color format | Modern color space, better for nautical palette gradations | ✓ Good |
 
 ---
-*Last updated: 2026-03-24 after initialization*
+*Last updated: 2026-03-24 after Phase 1 completion*
