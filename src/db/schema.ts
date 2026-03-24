@@ -63,6 +63,8 @@ export const bookings = pgTable('bookings', {
   startDate: text('start_date').notNull(),
   endDate: text('end_date').notNull(),
   totalPrice: real('total_price').notNull(),
+  checkInCode: text('check_in_code'),
+  checkedInAt: text('checked_in_at'),
   notes: text('notes'),
   createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
   updatedAt: text('updated_at').notNull().$defaultFn(() => new Date().toISOString()),
@@ -96,6 +98,19 @@ export const maintenanceRequests = pgTable('maintenance_requests', {
   resolvedAt: text('resolved_at'),
 });
 
+// ── Fuel Sales ────────────────────────────────────────────────────────────
+export const fuelSales = pgTable('fuel_sales', {
+  id: serial('id').primaryKey(),
+  slipId: integer('slip_id').notNull().references(() => slips.id),
+  boaterId: integer('boater_id').notNull().references(() => users.id),
+  recordedBy: integer('recorded_by').notNull().references(() => users.id),
+  fuelType: text('fuel_type', { enum: ['diesel', 'gas'] }).notNull(),
+  gallons: real('gallons').notNull(),
+  pricePerGallon: real('price_per_gallon').notNull(),
+  totalPrice: real('total_price').notNull(),
+  createdAt: text('created_at').notNull().$defaultFn(() => new Date().toISOString()),
+});
+
 // ── Relations ──────────────────────────────────────────────────────────────
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -103,6 +118,8 @@ export const usersRelations = relations(users, ({ many }) => ({
   bookings: many(bookings),
   waitlistEntries: many(waitlist),
   reportedMaintenance: many(maintenanceRequests),
+  fuelPurchases: many(fuelSales, { relationName: 'boaterFuel' }),
+  fuelRecorded: many(fuelSales, { relationName: 'recorderFuel' }),
 }));
 
 export const docksRelations = relations(docks, ({ many }) => ({
@@ -113,6 +130,7 @@ export const slipsRelations = relations(slips, ({ one, many }) => ({
   dock: one(docks, { fields: [slips.dockId], references: [docks.id] }),
   bookings: many(bookings),
   maintenanceRequests: many(maintenanceRequests),
+  fuelSales: many(fuelSales),
 }));
 
 export const vesselsRelations = relations(vessels, ({ one, many }) => ({
@@ -134,4 +152,10 @@ export const waitlistRelations = relations(waitlist, ({ one }) => ({
 export const maintenanceRequestsRelations = relations(maintenanceRequests, ({ one }) => ({
   slip: one(slips, { fields: [maintenanceRequests.slipId], references: [slips.id] }),
   reporter: one(users, { fields: [maintenanceRequests.reportedBy], references: [users.id] }),
+}));
+
+export const fuelSalesRelations = relations(fuelSales, ({ one }) => ({
+  slip: one(slips, { fields: [fuelSales.slipId], references: [slips.id] }),
+  boater: one(users, { fields: [fuelSales.boaterId], references: [users.id], relationName: 'boaterFuel' }),
+  recorder: one(users, { fields: [fuelSales.recordedBy], references: [users.id], relationName: 'recorderFuel' }),
 }));

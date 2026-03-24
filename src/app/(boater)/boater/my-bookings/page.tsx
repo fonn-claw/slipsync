@@ -4,7 +4,7 @@ import { eq, desc } from 'drizzle-orm';
 import { getSession } from '@/lib/auth';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Calendar, Anchor, Ship, CalendarDays } from 'lucide-react';
+import { Calendar, Anchor, Ship, CalendarDays, QrCode } from 'lucide-react';
 
 const statusStyles: Record<string, string> = {
   pending: 'bg-yellow-500/15 text-yellow-700 border-yellow-500/25',
@@ -77,8 +77,31 @@ export default async function MyBookingsPage() {
                       <Badge variant="secondary" className="text-xs capitalize">{b.type}</Badge>
                     </div>
                   </div>
-                  <div className="mt-2 text-sm font-semibold text-primary">
-                    ${b.totalPrice?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="text-sm font-semibold text-primary">
+                      ${b.totalPrice?.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </span>
+                    {b.checkInCode && b.status === 'confirmed' && (
+                      <div className="flex flex-col items-center gap-1">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={`/api/qr?code=${encodeURIComponent(b.checkInCode)}`}
+                          alt="Check-in QR Code"
+                          width={80}
+                          height={80}
+                          className="rounded border"
+                        />
+                        <span className="flex items-center gap-1 font-mono text-xs text-muted-foreground">
+                          <QrCode className="h-3 w-3" />
+                          {b.checkInCode}
+                        </span>
+                      </div>
+                    )}
+                    {b.checkedInAt && b.status === 'checked_in' && (
+                      <span className="text-xs text-green-600">
+                        Checked in {new Date(b.checkedInAt).toLocaleDateString()}
+                      </span>
+                    )}
                   </div>
                 </CardContent>
               </Card>

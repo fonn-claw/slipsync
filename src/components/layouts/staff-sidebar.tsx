@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Map, Ship, Wrench, Calendar } from "lucide-react";
+import { Map, Ship, Wrench, Calendar, Fuel } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -22,6 +22,7 @@ import { Separator } from "@/components/ui/separator";
 const navItems = [
   { title: "Marina Map", href: "/staff/operations", icon: Map },
   { title: "Check In/Out", href: "/staff/check-in", icon: Ship },
+  { title: "Fuel Sales", href: "/staff/fuel", icon: Fuel },
   { title: "Maintenance", href: "/staff/maintenance", icon: Wrench },
   { title: "Schedule", href: "/staff/schedule", icon: Calendar },
 ];

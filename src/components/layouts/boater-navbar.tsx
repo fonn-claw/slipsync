@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calendar, Compass, Ship, Wrench, Menu, X } from "lucide-react";
+import { Calendar, Compass, Ship, Wrench, Menu, X, Fuel } from "lucide-react";
 import { useState } from "react";
 import { MarinaLogo } from "./marina-logo";
 import { LogoutButton } from "./logout-button";
@@ -19,6 +19,7 @@ const navItems = [
   { title: "My Bookings", href: "/boater/my-bookings", icon: Calendar },
   { title: "Browse Slips", href: "/boater/browse", icon: Compass },
   { title: "My Vessels", href: "/boater/vessels", icon: Ship },
+  { title: "Fuel Charges", href: "/boater/fuel", icon: Fuel },
   { title: "Maintenance", href: "/boater/maintenance", icon: Wrench },
 ];
 

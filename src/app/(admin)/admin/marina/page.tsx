@@ -2,6 +2,8 @@ import { getSlipsWithDetails } from '@/lib/dal/slips';
 import { getSession } from '@/lib/auth';
 import { MarinaMap } from '@/components/marina-map/marina-map';
 import { Anchor, Ship, Wrench, CheckCircle } from 'lucide-react';
+import { WeatherWidget } from '@/components/weather-widget';
+import { getWeather } from '@/lib/dal/weather';
 
 function StatCard({
   icon: Icon,
@@ -28,9 +30,10 @@ function StatCard({
 }
 
 export default async function MarinaPage() {
-  const [session, slips] = await Promise.all([
+  const [session, slips, weather] = await Promise.all([
     getSession(),
     getSlipsWithDetails(),
+    getWeather(),
   ]);
 
   const total = slips.length;
@@ -49,12 +52,13 @@ export default async function MarinaPage() {
         </p>
       </div>
 
-      {/* Quick stats */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+      {/* Quick stats + weather */}
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
         <StatCard icon={Anchor} label="Total Slips" value={total} color="bg-slate-600" />
         <StatCard icon={Ship} label="Occupied" value={occupied} color="bg-blue-500" />
         <StatCard icon={CheckCircle} label="Available" value={available} color="bg-green-500" />
         <StatCard icon={Wrench} label="Maintenance" value={maintenance} color="bg-red-500" />
+        <WeatherWidget weather={weather} compact />
       </div>
 
       {/* The hero marina map */}

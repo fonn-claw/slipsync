@@ -1,5 +1,6 @@
 import { getTodayArrivals, getTodayDepartures } from '@/lib/dal/bookings';
 import { ArrivalsAndDepartures } from '@/components/booking/arrivals-departures';
+import { QrCheckInForm } from '@/components/qr-checkin-form';
 
 export default async function CheckInPage() {
   const [arrivals, departures] = await Promise.all([
@@ -15,6 +16,7 @@ export default async function CheckInPage() {
           {arrivals.length} arrival{arrivals.length !== 1 ? 's' : ''} &middot; {departures.length} departure{departures.length !== 1 ? 's' : ''} today
         </p>
       </div>
+      <QrCheckInForm />
       <ArrivalsAndDepartures arrivals={arrivals} departures={departures} />
     </div>
   );

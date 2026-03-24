@@ -1,7 +1,7 @@
 # AGENTS.md — Build Instructions
 
 ## Context
-This is a FonnIT daily build project. Read BRIEF.md for what to build.
+This is a FonnIT daily build project. Read BRIEF-V2.md for the v2 feature update.
 
 ## CRITICAL: Single-Session Build
 Complete the ENTIRE app in this single session. Do NOT stop between phases.
@@ -28,9 +28,11 @@ with frontend work.
 
 ## Deploy
 When finished, push to GitHub:
-- git remote add origin https://github.com/fonn-claw/slipsync.git
-- git push -u origin main
+- git add -A && git commit -m "feat: SlipSync v2 — weather, QR check-in, fuel tracking" && git push origin main
+
+Then redeploy:
+- cd /home/fonn/.openclaw/workspace/projects/slipsync && npx vercel --prod
 
 ## On Completion
 When completely finished, run:
-openclaw system event --text "BUILD COMPLETE: SlipSync — Marina & Boat Slip Management" --mode now
+openclaw system event --text "BUILD COMPLETE: SlipSync v2 — Weather, QR Check-in, Fuel Tracking" --mode now

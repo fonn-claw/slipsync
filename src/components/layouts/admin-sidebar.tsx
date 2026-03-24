@@ -10,6 +10,7 @@ import {
   Users,
   Wrench,
   ListOrdered,
+  Fuel,
 } from "lucide-react";
 import {
   Sidebar,
@@ -33,6 +34,7 @@ const navItems = [
   { title: "Bookings", href: "/admin/bookings", icon: Calendar },
   { title: "Calendar", href: "/admin/bookings/calendar", icon: CalendarDays },
   { title: "Boaters", href: "/admin/boaters", icon: Users },
+  { title: "Fuel Sales", href: "/admin/fuel", icon: Fuel },
   { title: "Maintenance", href: "/admin/maintenance", icon: Wrench },
   { title: "Waitlist", href: "/admin/waitlist", icon: ListOrdered },
 ];

@@ -9,8 +9,17 @@ import * as schema from './schema';
 import { daysFromNow, isoNow } from './seed-helpers';
 
 const {
-  users, docks, slips, vessels, bookings, waitlist, maintenanceRequests,
+  users, docks, slips, vessels, bookings, waitlist, maintenanceRequests, fuelSales,
 } = schema;
+
+function generateCheckInCode(): string {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let code = 'SS-';
+  for (let i = 0; i < 6; i++) {
+    code += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return code;
+}
 
 export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
   let db: ReturnType<typeof drizzle>;
@@ -26,6 +35,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
   const passwordHash = bcrypt.hashSync('demo1234', 10);
 
   // ── Clear tables in reverse FK order ─────────────────────────────────
+  await db.delete(fuelSales);
   await db.delete(maintenanceRequests);
   await db.delete(waitlist);
   await db.delete(bookings);
@@ -161,6 +171,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
   const allSlips = await db.select().from(slips);
   const occupiedSlips = allSlips.filter((s) => s.status === 'occupied');
   const reservedSlips = allSlips.filter((s) => s.status === 'reserved');
+  const availableSlips = allSlips.filter((s) => s.status === 'available');
   const maintenanceSlips = allSlips.filter((s) => s.status === 'maintenance');
 
   // ── Vessels ──────────────────────────────────────────────────────────
@@ -290,9 +301,31 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
     startDate: daysFromNow(-10),
     endDate: daysFromNow(20),
     totalPrice: sarahSlip.priceDaily * 30,
+    checkedInAt: daysFromNow(-10) + 'T09:15:00.000Z',
     createdAt: now,
     updatedAt: now,
   });
+
+  // Sarah's second booking (upcoming, confirmed with QR code)
+  const harborLight = allVessels.find((v) => v.name === 'Harbor Light')!;
+  const sarahSecondSlip = availableSlips.find(
+    (s) => harborLight.loa <= s.maxLength && harborLight.beam <= s.maxBeam && harborLight.draft <= s.maxDraft
+  );
+  if (sarahSecondSlip) {
+    await db.insert(bookings).values({
+      slipId: sarahSecondSlip.id,
+      vesselId: harborLight.id,
+      boaterId: sarahChen.id,
+      type: 'transient',
+      status: 'confirmed',
+      startDate: daysFromNow(5),
+      endDate: daysFromNow(12),
+      totalPrice: sarahSecondSlip.priceDaily * 7,
+      checkInCode: 'SS-DEMO42',
+      createdAt: now,
+      updatedAt: now,
+    });
+  }
 
   // 2) Remaining occupied slips get checked_in bookings
   const remainingOccupied = occupiedSlips.filter((s) => s.id !== sarahSlip.id);
@@ -343,13 +376,13 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
       startDate: daysFromNow(startOffset),
       endDate: daysFromNow(endOffset),
       totalPrice: slip.priceDaily * days,
+      checkInCode: generateCheckInCode(),
       createdAt: now,
       updatedAt: now,
     });
   }
 
   // 4) Historical bookings (checked_out) - 15 past bookings
-  const availableSlips = allSlips.filter((s) => s.status === 'available');
   for (let i = 0; i < 15; i++) {
     const slip = availableSlips[i % availableSlips.length];
     const v = findFittingVessel(slip, []) || findAnyFittingVessel(slip);
@@ -425,7 +458,41 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
     });
   }
 
-  const allBookings = await db.select().from(bookings);
+  // ── Fuel Sales (last 30 days) ────────────────────────────────────────
+  const fuelTypes: Array<'diesel' | 'gas'> = ['diesel', 'gas'];
+  const occupiedBoatersForFuel = occupiedSlips.slice(0, 15);
+  const allBookingsList = await db.select().from(bookings);
+
+  for (let dayOffset = 30; dayOffset >= 0; dayOffset--) {
+    // 1-4 fuel sales per day
+    const salesPerDay = 1 + (dayOffset % 4);
+    for (let s = 0; s < salesPerDay; s++) {
+      const slipIdx = (dayOffset * 3 + s) % occupiedBoatersForFuel.length;
+      const slip = occupiedBoatersForFuel[slipIdx];
+
+      // Find the boater for this slip from bookings
+      const booking = allBookingsList.find((b) => b.slipId === slip.id && b.status === 'checked_in');
+      if (!booking) continue;
+
+      const ft = fuelTypes[(dayOffset + s) % 2];
+      const gallons = Math.round((15 + Math.random() * 85) * 10) / 10;
+      const ppg = ft === 'diesel' ? 4.89 : 3.79;
+      const total = Math.round(gallons * ppg * 100) / 100;
+
+      await db.insert(fuelSales).values({
+        slipId: slip.id,
+        boaterId: booking.boaterId,
+        recordedBy: dockStaff.id,
+        fuelType: ft,
+        gallons,
+        pricePerGallon: ppg,
+        totalPrice: total,
+        createdAt: daysFromNow(-dayOffset) + 'T' + String(8 + (s * 3) % 10).padStart(2, '0') + ':' + String((dayOffset * 7 + s * 13) % 60).padStart(2, '0') + ':00.000Z',
+      });
+    }
+  }
+
+  const allFuelSales = await db.select().from(fuelSales);
   const allWaitlist = await db.select().from(waitlist);
   const allMaintenance = await db.select().from(maintenanceRequests);
 
@@ -434,9 +501,10 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
   console.log(`  Docks: ${allDocks.length}`);
   console.log(`  Slips: ${allSlips.length}`);
   console.log(`  Vessels: ${allVessels.length}`);
-  console.log(`  Bookings: ${allBookings.length}`);
+  console.log(`  Bookings: ${allBookingsList.length}`);
   console.log(`  Waitlist: ${allWaitlist.length}`);
   console.log(`  Maintenance: ${allMaintenance.length}`);
+  console.log(`  Fuel Sales: ${allFuelSales.length}`);
 }
 
 // Run directly when executed as a script
