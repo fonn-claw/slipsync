@@ -46,11 +46,11 @@ Plans:
   3. Clicking a slip opens a detail panel showing vessel info, booking history, and role-appropriate actions
   4. Admin/staff can change slip status directly from the map detail panel
   5. Map is responsive and usable on tablet screens with touch interaction
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md -- Data access layer, server action for status change, layout computation engine with unit tests
+- [ ] 02-02-PLAN.md -- SVG map components, detail panel with status change UI, admin/staff page wiring
 
 ### Phase 3: Booking System
 **Goal**: Staff and boaters can create, manage, and track bookings with vessel size validation and zero double-booking risk
