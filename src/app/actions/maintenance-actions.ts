@@ -15,7 +15,7 @@ export async function createMaintenanceRequest(data: {
   const session = await getSession();
   if (!session.isLoggedIn) return { success: false, error: 'Unauthorized' };
 
-  const result = db
+  const [result] = await db
     .insert(maintenanceRequests)
     .values({
       slipId: data.slipId,
@@ -26,8 +26,7 @@ export async function createMaintenanceRequest(data: {
       status: 'open',
       createdAt: new Date().toISOString(),
     })
-    .returning()
-    .get();
+    .returning();
 
   revalidatePath('/boater/maintenance');
   revalidatePath('/staff/maintenance');
@@ -50,14 +49,13 @@ export async function updateMaintenanceStatus(
   });
   if (!existing) return { success: false, error: 'Request not found' };
 
-  db.update(maintenanceRequests)
+  await db.update(maintenanceRequests)
     .set({
       status: newStatus,
       resolvedAt: newStatus === 'completed' ? new Date().toISOString() : existing.resolvedAt,
       assignedTo: newStatus === 'in_progress' ? session.userId : existing.assignedTo,
     })
-    .where(eq(maintenanceRequests.id, requestId))
-    .run();
+    .where(eq(maintenanceRequests.id, requestId));
 
   revalidatePath('/boater/maintenance');
   revalidatePath('/staff/maintenance');

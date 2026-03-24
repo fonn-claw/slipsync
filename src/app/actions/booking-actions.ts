@@ -47,8 +47,8 @@ export async function createBooking(input: CreateBookingInput) {
     priceMonthly: slip.priceMonthly,
   });
 
-  // Create booking within transaction
-  const result = createBookingTransaction({
+  // Create booking
+  const result = await createBookingTransaction({
     slipId: data.slipId,
     vesselId: data.vesselId,
     boaterId: data.boaterId,
@@ -88,7 +88,7 @@ export async function updateBookingStatus(bookingId: number, newStatus: string) 
     return { success: false, error: 'Unauthorized' };
   }
 
-  const result = updateBookingStatusTransaction(bookingId, newStatus);
+  const result = await updateBookingStatusTransaction(bookingId, newStatus);
 
   if (!result.success) {
     return { success: false, error: result.error };

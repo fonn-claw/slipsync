@@ -20,7 +20,7 @@ export async function createVessel(data: {
     return { success: false, error: 'Only boaters can register vessels' };
   }
 
-  const result = db
+  const [result] = await db
     .insert(vessels)
     .values({
       ownerId: session.userId,
@@ -33,8 +33,7 @@ export async function createVessel(data: {
       year: data.year ?? null,
       createdAt: new Date().toISOString(),
     })
-    .returning()
-    .get();
+    .returning();
 
   revalidatePath('/boater/vessels');
 
@@ -52,7 +51,7 @@ export async function deleteVessel(vesselId: number) {
   });
   if (!vessel) return { success: false, error: 'Vessel not found' };
 
-  db.delete(vessels).where(eq(vessels.id, vesselId)).run();
+  await db.delete(vessels).where(eq(vessels.id, vesselId));
   revalidatePath('/boater/vessels');
 
   return { success: true };

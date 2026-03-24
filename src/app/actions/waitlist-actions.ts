@@ -12,7 +12,7 @@ export async function removeFromWaitlist(entryId: number) {
     return { success: false, error: 'Unauthorized' };
   }
 
-  db.delete(waitlist).where(eq(waitlist.id, entryId)).run();
+  await db.delete(waitlist).where(eq(waitlist.id, entryId));
   revalidatePath('/admin/waitlist');
   revalidatePath('/admin/dashboard');
 
@@ -28,10 +28,9 @@ export async function updateWaitlistStatus(
     return { success: false, error: 'Unauthorized' };
   }
 
-  db.update(waitlist)
+  await db.update(waitlist)
     .set({ status })
-    .where(eq(waitlist.id, entryId))
-    .run();
+    .where(eq(waitlist.id, entryId));
 
   revalidatePath('/admin/waitlist');
   revalidatePath('/admin/dashboard');

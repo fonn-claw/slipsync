@@ -1,9 +1,10 @@
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
+import dotenv from 'dotenv';
+dotenv.config({ path: '.env.local' });
+
+import { neon } from '@neondatabase/serverless';
+import { drizzle } from 'drizzle-orm/neon-http';
 import { eq } from 'drizzle-orm';
 import bcrypt from 'bcryptjs';
-import path from 'path';
-import fs from 'fs';
 import * as schema from './schema';
 import { daysFromNow, isoNow } from './seed-helpers';
 
@@ -17,26 +18,21 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
   if (dbInstance) {
     db = dbInstance;
   } else {
-    const dataDir = path.join(process.cwd(), 'data');
-    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
-    const dbPath = path.join(dataDir, 'slipsync.db');
-    const sqlite = new Database(dbPath);
-    sqlite.pragma('journal_mode = WAL');
-    sqlite.pragma('foreign_keys = ON');
-    db = drizzle(sqlite, { schema });
+    const sql = neon(process.env.DATABASE_URL!);
+    db = drizzle(sql, { schema });
   }
 
   const now = isoNow();
   const passwordHash = bcrypt.hashSync('demo1234', 10);
 
   // ── Clear tables in reverse FK order ─────────────────────────────────
-  db.delete(maintenanceRequests).run();
-  db.delete(waitlist).run();
-  db.delete(bookings).run();
-  db.delete(vessels).run();
-  db.delete(slips).run();
-  db.delete(docks).run();
-  db.delete(users).run();
+  await db.delete(maintenanceRequests);
+  await db.delete(waitlist);
+  await db.delete(bookings);
+  await db.delete(vessels);
+  await db.delete(slips);
+  await db.delete(docks);
+  await db.delete(users);
 
   // ── Users ────────────────────────────────────────────────────────────
   const staffUsers = [
@@ -70,10 +66,10 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
   ];
 
   for (const u of allUserInserts) {
-    db.insert(users).values(u).run();
+    await db.insert(users).values(u);
   }
 
-  const allUsers = db.select().from(users).all();
+  const allUsers = await db.select().from(users);
   const adminUser = allUsers.find((u) => u.email === 'admin@slipsync.app')!;
   const dockStaff = allUsers.find((u) => u.email === 'dock@slipsync.app')!;
   const sarahChen = allUsers.find((u) => u.email === 'boater@slipsync.app')!;
@@ -88,9 +84,9 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
   ];
 
   for (const d of dockData) {
-    db.insert(docks).values(d).run();
+    await db.insert(docks).values(d);
   }
-  const allDocks = db.select().from(docks).all();
+  const allDocks = await db.select().from(docks);
 
   // ── Slips ────────────────────────────────────────────────────────────
   interface SlipConfig {
@@ -113,14 +109,6 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
   function lerp(min: number, max: number, t: number): number {
     return Math.round((min + (max - min) * t) * 100) / 100;
   }
-
-  // Status distribution across 60 slips: 24 occupied, 12 reserved, 18 available, 6 maintenance
-  // Assign deterministically per dock proportionally
-  // Dock A (20): 8 occupied, 4 reserved, 6 available, 2 maintenance
-  // Dock B (15): 6 occupied, 3 reserved, 4 available, 2 maintenance
-  // Dock C (15): 6 occupied, 3 reserved, 5 available, 1 maintenance
-  // Dock D (10): 4 occupied, 2 reserved, 3 available, 1 maintenance
-  // Total: 24 occupied, 12 reserved, 18 available, 6 maintenance
 
   const statusDistribution: Record<string, Array<'occupied' | 'reserved' | 'available' | 'maintenance'>> = {
     A: [
@@ -155,7 +143,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
 
     for (let i = 0; i < cfg.count; i++) {
       const t = cfg.count === 1 ? 0 : i / (cfg.count - 1);
-      db.insert(slips).values({
+      await db.insert(slips).values({
         dockId: dock.id,
         number: `${cfg.dockName}-${String(i + 1).padStart(2, '0')}`,
         maxLength: lerp(cfg.lengthRange[0], cfg.lengthRange[1], t),
@@ -166,11 +154,11 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
         priceMonthly: lerp(cfg.monthlyRange[0], cfg.monthlyRange[1], t),
         hasElectric: true,
         hasWater: true,
-      }).run();
+      });
     }
   }
 
-  const allSlips = db.select().from(slips).all();
+  const allSlips = await db.select().from(slips);
   const occupiedSlips = allSlips.filter((s) => s.status === 'occupied');
   const reservedSlips = allSlips.filter((s) => s.status === 'reserved');
   const maintenanceSlips = allSlips.filter((s) => s.status === 'maintenance');
@@ -186,7 +174,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
   const vesselTypes = ['sailboat', 'powerboat', 'catamaran', 'trawler', 'center_console'];
 
   // Sarah Chen's vessels (must be exactly 2)
-  db.insert(vessels).values({
+  await db.insert(vessels).values({
     ownerId: sarahChen.id,
     name: 'Sea Breeze',
     type: 'sailboat',
@@ -196,9 +184,9 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
     registrationNumber: 'FL-2019-SB-0001',
     year: 2019,
     createdAt: now,
-  }).run();
+  });
 
-  db.insert(vessels).values({
+  await db.insert(vessels).values({
     ownerId: sarahChen.id,
     name: 'Harbor Light',
     type: 'powerboat',
@@ -208,7 +196,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
     registrationNumber: 'FL-2022-HL-0002',
     year: 2022,
     createdAt: now,
-  }).run();
+  });
 
   // Other boaters' vessels -- one per boater, some get a second
   const otherBoaters = boaterUsers.filter((u) => u.id !== sarahChen.id);
@@ -216,8 +204,6 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
 
   for (let i = 0; i < otherBoaters.length; i++) {
     const boater = otherBoaters[i];
-    // Determine vessel size based on which dock they'd fit
-    // First 5 boaters: small vessels, next 4: medium, next 4: large, last 2: extra large
     let loa: number, beam: number, draft: number;
     if (i < 5) {
       loa = 22 + i * 1.5;
@@ -237,7 +223,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
       draft = 8 + (i - 13) * 1.5;
     }
 
-    db.insert(vessels).values({
+    await db.insert(vessels).values({
       ownerId: boater.id,
       name: vesselNames[vesselNameIdx % vesselNames.length],
       type: vesselTypes[i % vesselTypes.length],
@@ -247,12 +233,12 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
       registrationNumber: `FL-${2018 + (i % 7)}-VL-${String(i + 3).padStart(4, '0')}`,
       year: 2018 + (i % 7),
       createdAt: now,
-    }).run();
+    });
     vesselNameIdx++;
 
-    // Give some boaters a second vessel (boaters at indices 1, 3, 5, 7, 9, 11, 14)
+    // Give some boaters a second vessel
     if (i === 1 || i === 3 || i === 5 || i === 7 || i === 9 || i === 11 || i === 14) {
-      db.insert(vessels).values({
+      await db.insert(vessels).values({
         ownerId: boater.id,
         name: vesselNames[vesselNameIdx % vesselNames.length],
         type: vesselTypes[(i + 2) % vesselTypes.length],
@@ -262,12 +248,12 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
         registrationNumber: `FL-${2020 + (i % 5)}-VL-${String(i + 20).padStart(4, '0')}`,
         year: 2020 + (i % 5),
         createdAt: now,
-      }).run();
+      });
       vesselNameIdx++;
     }
   }
 
-  const allVessels = db.select().from(vessels).all();
+  const allVessels = await db.select().from(vessels);
 
   // Helper: find a vessel that fits a given slip
   function findFittingVessel(slip: typeof allSlips[0], excludeOwnerIds: number[] = []) {
@@ -295,7 +281,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
     (s) => sarahVessel.loa <= s.maxLength && sarahVessel.beam <= s.maxBeam && sarahVessel.draft <= s.maxDraft
   )!;
 
-  db.insert(bookings).values({
+  await db.insert(bookings).values({
     slipId: sarahSlip.id,
     vesselId: sarahVessel.id,
     boaterId: sarahChen.id,
@@ -306,7 +292,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
     totalPrice: sarahSlip.priceDaily * 30,
     createdAt: now,
     updatedAt: now,
-  }).run();
+  });
 
   // 2) Remaining occupied slips get checked_in bookings
   const remainingOccupied = occupiedSlips.filter((s) => s.id !== sarahSlip.id);
@@ -324,7 +310,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
     const endOffset = 5 + (seedCounter * 7) % 26;
     const days = endOffset - startOffset;
 
-    db.insert(bookings).values({
+    await db.insert(bookings).values({
       slipId: slip.id,
       vesselId: v.id,
       boaterId: v.ownerId,
@@ -335,7 +321,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
       totalPrice: slip.priceDaily * days,
       createdAt: now,
       updatedAt: now,
-    }).run();
+    });
   }
 
   // 3) Upcoming reservations for reserved slips (confirmed)
@@ -348,7 +334,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
     const endOffset = startOffset + 14 + (seedCounter * 5) % 31;
     const days = endOffset - startOffset;
 
-    db.insert(bookings).values({
+    await db.insert(bookings).values({
       slipId: slip.id,
       vesselId: v.id,
       boaterId: v.ownerId,
@@ -359,7 +345,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
       totalPrice: slip.priceDaily * days,
       createdAt: now,
       updatedAt: now,
-    }).run();
+    });
   }
 
   // 4) Historical bookings (checked_out) - 15 past bookings
@@ -373,7 +359,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
     const startOffset = endOffset - (5 + (i % 15));
     const days = Math.abs(endOffset - startOffset);
 
-    db.insert(bookings).values({
+    await db.insert(bookings).values({
       slipId: slip.id,
       vesselId: v.id,
       boaterId: v.ownerId,
@@ -384,7 +370,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
       totalPrice: slip.priceDaily * days,
       createdAt: now,
       updatedAt: now,
-    }).run();
+    });
   }
 
   // ── Waitlist ─────────────────────────────────────────────────────────
@@ -396,7 +382,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
     const vessel = allVessels.find((v) => v.ownerId === boater.id);
     if (!vessel) continue;
 
-    db.insert(waitlist).values({
+    await db.insert(waitlist).values({
       boaterId: boater.id,
       vesselId: vessel.id,
       preferredDock: ['A', 'B', 'C', 'D'][i],
@@ -406,7 +392,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
       status: waitlistStatuses[i],
       priority: i,
       createdAt: now,
-    }).run();
+    });
   }
 
   // ── Maintenance Requests ─────────────────────────────────────────────
@@ -426,7 +412,7 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
     const reporter = maintenanceReporters[i];
     const maint = maintenanceData[i];
 
-    db.insert(maintenanceRequests).values({
+    await db.insert(maintenanceRequests).values({
       slipId: slip.id,
       reportedBy: reporter.id,
       assignedTo: maint.status === 'in_progress' || maint.status === 'completed' ? dockStaff.id : null,
@@ -436,17 +422,21 @@ export async function seed(dbInstance?: ReturnType<typeof drizzle>) {
       status: maint.status,
       createdAt: daysFromNow(-(10 + i * 3)),
       resolvedAt: maint.resolvedAt,
-    }).run();
+    });
   }
+
+  const allBookings = await db.select().from(bookings);
+  const allWaitlist = await db.select().from(waitlist);
+  const allMaintenance = await db.select().from(maintenanceRequests);
 
   console.log('Seed complete!');
   console.log(`  Users: ${allUsers.length}`);
   console.log(`  Docks: ${allDocks.length}`);
   console.log(`  Slips: ${allSlips.length}`);
   console.log(`  Vessels: ${allVessels.length}`);
-  console.log(`  Bookings: ${db.select().from(bookings).all().length}`);
-  console.log(`  Waitlist: ${db.select().from(waitlist).all().length}`);
-  console.log(`  Maintenance: ${db.select().from(maintenanceRequests).all().length}`);
+  console.log(`  Bookings: ${allBookings.length}`);
+  console.log(`  Waitlist: ${allWaitlist.length}`);
+  console.log(`  Maintenance: ${allMaintenance.length}`);
 }
 
 // Run directly when executed as a script

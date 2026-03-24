@@ -24,7 +24,7 @@ export async function getRevenueOverview() {
     const monthStart = format(startOfMonth(monthDate), 'yyyy-MM-dd');
     const monthEnd = format(endOfMonth(monthDate), 'yyyy-MM-dd');
 
-    const result = await db
+    const [result] = await db
       .select({ total: sum(bookings.totalPrice) })
       .from(bookings)
       .where(
@@ -33,8 +33,7 @@ export async function getRevenueOverview() {
           lte(bookings.startDate, monthEnd),
           not(eq(bookings.status, 'cancelled')),
         ),
-      )
-      .get();
+      );
 
     months.push({
       label: format(monthDate, 'MMM yyyy'),
@@ -51,7 +50,7 @@ export async function getRevenueOverview() {
     const slipIds = dockSlips.map((s) => s.id);
     if (slipIds.length === 0) { byDock.push({ dock: dock.name, revenue: 0 }); continue; }
 
-    const result = await db
+    const [result] = await db
       .select({ total: sum(bookings.totalPrice) })
       .from(bookings)
       .where(
@@ -59,8 +58,7 @@ export async function getRevenueOverview() {
           inArray(bookings.slipId, slipIds),
           not(eq(bookings.status, 'cancelled')),
         ),
-      )
-      .get();
+      );
 
     byDock.push({ dock: dock.name, revenue: Number(result?.total ?? 0) });
   }

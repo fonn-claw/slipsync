@@ -1,9 +1,9 @@
-import { sqliteTable, text, integer, real } from 'drizzle-orm/sqlite-core';
+import { pgTable, text, integer, real, serial, boolean } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
 // ── Users ──────────────────────────────────────────────────────────────────
-export const users = sqliteTable('users', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash').notNull(),
   name: text('name').notNull(),
@@ -13,8 +13,8 @@ export const users = sqliteTable('users', {
 });
 
 // ── Docks ──────────────────────────────────────────────────────────────────
-export const docks = sqliteTable('docks', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+export const docks = pgTable('docks', {
+  id: serial('id').primaryKey(),
   name: text('name').notNull(),
   description: text('description'),
   sizeCategory: text('size_category', { enum: ['small', 'medium', 'large', 'extra_large'] }).notNull(),
@@ -23,8 +23,8 @@ export const docks = sqliteTable('docks', {
 });
 
 // ── Slips ──────────────────────────────────────────────────────────────────
-export const slips = sqliteTable('slips', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+export const slips = pgTable('slips', {
+  id: serial('id').primaryKey(),
   dockId: integer('dock_id').notNull().references(() => docks.id),
   number: text('number').notNull().unique(),
   maxLength: real('max_length').notNull(),
@@ -33,14 +33,14 @@ export const slips = sqliteTable('slips', {
   status: text('status', { enum: ['available', 'occupied', 'reserved', 'maintenance'] }).notNull().default('available'),
   priceDaily: real('price_daily').notNull(),
   priceMonthly: real('price_monthly').notNull(),
-  hasElectric: integer('has_electric', { mode: 'boolean' }).notNull().default(true),
-  hasWater: integer('has_water', { mode: 'boolean' }).notNull().default(true),
+  hasElectric: boolean('has_electric').notNull().default(true),
+  hasWater: boolean('has_water').notNull().default(true),
   notes: text('notes'),
 });
 
 // ── Vessels ────────────────────────────────────────────────────────────────
-export const vessels = sqliteTable('vessels', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+export const vessels = pgTable('vessels', {
+  id: serial('id').primaryKey(),
   ownerId: integer('owner_id').notNull().references(() => users.id),
   name: text('name').notNull(),
   type: text('type').notNull(),
@@ -53,8 +53,8 @@ export const vessels = sqliteTable('vessels', {
 });
 
 // ── Bookings ───────────────────────────────────────────────────────────────
-export const bookings = sqliteTable('bookings', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+export const bookings = pgTable('bookings', {
+  id: serial('id').primaryKey(),
   slipId: integer('slip_id').notNull().references(() => slips.id),
   vesselId: integer('vessel_id').notNull().references(() => vessels.id),
   boaterId: integer('boater_id').notNull().references(() => users.id),
@@ -69,8 +69,8 @@ export const bookings = sqliteTable('bookings', {
 });
 
 // ── Waitlist ───────────────────────────────────────────────────────────────
-export const waitlist = sqliteTable('waitlist', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+export const waitlist = pgTable('waitlist', {
+  id: serial('id').primaryKey(),
   boaterId: integer('boater_id').notNull().references(() => users.id),
   vesselId: integer('vessel_id').notNull().references(() => vessels.id),
   preferredDock: text('preferred_dock'),
@@ -83,8 +83,8 @@ export const waitlist = sqliteTable('waitlist', {
 });
 
 // ── Maintenance Requests ───────────────────────────────────────────────────
-export const maintenanceRequests = sqliteTable('maintenance_requests', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+export const maintenanceRequests = pgTable('maintenance_requests', {
+  id: serial('id').primaryKey(),
   slipId: integer('slip_id').notNull().references(() => slips.id),
   reportedBy: integer('reported_by').notNull().references(() => users.id),
   assignedTo: integer('assigned_to').references(() => users.id),
