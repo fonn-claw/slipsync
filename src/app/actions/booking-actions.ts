@@ -64,7 +64,7 @@ export async function createBooking(input: CreateBookingInput) {
   }
 
   revalidatePath('/admin/bookings');
-  revalidatePath('/marina');
+  revalidatePath('/admin/marina');
   revalidatePath('/staff/operations');
   revalidatePath('/admin/dashboard');
 
@@ -95,7 +95,7 @@ export async function updateBookingStatus(bookingId: number, newStatus: string) 
   }
 
   revalidatePath('/admin/bookings');
-  revalidatePath('/marina');
+  revalidatePath('/admin/marina');
   revalidatePath('/staff/operations');
   revalidatePath('/admin/dashboard');
 

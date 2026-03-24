@@ -212,8 +212,8 @@ describe('Slip DAL and Server Actions', () => {
       });
       expect(slip!.status).toBe('maintenance');
       expect(slip!.notes).toBe('Needs repair');
-      expect(mockRevalidatePath).toHaveBeenCalledWith('/marina');
-      expect(mockRevalidatePath).toHaveBeenCalledWith('/operations');
+      expect(mockRevalidatePath).toHaveBeenCalledWith('/admin/marina');
+      expect(mockRevalidatePath).toHaveBeenCalledWith('/staff/operations');
     });
 
     it('updates slip status when called by dock_staff', async () => {

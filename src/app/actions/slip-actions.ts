@@ -22,6 +22,6 @@ export async function changeSlipStatus(
     .set({ status: newStatus, notes: notes ?? null })
     .where(eq(slips.id, slipId));
 
-  revalidatePath('/marina');
-  revalidatePath('/operations');
+  revalidatePath('/admin/marina');
+  revalidatePath('/staff/operations');
 }
