@@ -62,11 +62,12 @@ Plans:
   3. System prevents double-booking at the database level -- concurrent attempts for the same slip/dates result in one success and one rejection
   4. Bookings progress through lifecycle states (pending, confirmed, checked-in, checked-out) with only valid transitions allowed
   5. Calendar view shows slip/dock availability and staff can see upcoming arrivals and departures
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md -- Domain rules, validation schemas, DAL with transactional double-booking prevention, server actions with tests
+- [ ] 03-02-PLAN.md -- Booking form UI, booking detail panel, bookings listing page, map "Book this Slip" wiring
+- [ ] 03-03-PLAN.md -- Calendar Gantt-style availability view, arrivals/departures cards on staff operations page
 
 ### Phase 4: Portals & Dashboard
 **Goal**: Each user role has a tailored experience -- admin sees analytics, boaters self-serve, staff manages operations
@@ -94,5 +95,5 @@ Phases execute in numeric order: 1 → 2 → 3 → 4
 |-------|----------------|--------|-----------|
 | 1. Foundation & Data Layer | 2/3 | In Progress|  |
 | 2. Interactive Marina Map | 2/2 | Complete   | 2026-03-24 |
-| 3. Booking System | 0/2 | Not started | - |
+| 3. Booking System | 0/3 | Not started | - |
 | 4. Portals & Dashboard | 0/3 | Not started | - |
