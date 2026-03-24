@@ -1,7 +1,7 @@
 # Requirements: SlipSync
 
 **Defined:** 2026-03-24
-**Core Value:** Marina operators can visually manage slips, bookings, and boaters through a stunning interactive map — replacing spreadsheets with a modern system that prevents double bookings.
+**Core Value:** Marina operators can visually manage slips, bookings, and boaters through a stunning interactive map -- replacing spreadsheets with a modern system that prevents double bookings.
 
 ## v1 Requirements
 
@@ -33,7 +33,7 @@
 - [ ] **BOOK-02**: Admin/staff can create seasonal reservations
 - [ ] **BOOK-03**: Vessel size is validated against slip dimensions before booking (LOA, beam, draft)
 - [ ] **BOOK-04**: Double-booking prevention enforced at database level
-- [ ] **BOOK-05**: Booking lifecycle: pending → confirmed → checked-in → checked-out
+- [ ] **BOOK-05**: Booking lifecycle: pending -> confirmed -> checked-in -> checked-out
 - [ ] **BOOK-06**: Calendar view shows availability per slip and per dock
 - [ ] **BOOK-07**: Upcoming arrivals and departures displayed for staff
 
@@ -57,7 +57,7 @@
 ### Maintenance
 
 - [ ] **MAINT-01**: Maintenance requests can be submitted with description and priority
-- [ ] **MAINT-02**: Maintenance requests have lifecycle: open → in-progress → resolved
+- [ ] **MAINT-02**: Maintenance requests have lifecycle: open -> in-progress -> resolved
 - [ ] **MAINT-03**: Staff can view and update maintenance request status
 
 ### Demo Data & Seed
@@ -72,8 +72,8 @@
 
 - [ ] **UX-01**: Ocean/nautical color palette (navy blues, teals, seafoam, whites)
 - [ ] **UX-02**: Clean, modern, professional UI using shadcn/ui components
-- [ ] **UX-03**: Responsive design — works on desktop and tablet
-- [ ] **UX-04**: Marina map is the centerpiece — large, prominent, interactive
+- [ ] **UX-03**: Responsive design -- works on desktop and tablet
+- [ ] **UX-04**: Marina map is the centerpiece -- large, prominent, interactive
 - [ ] **UX-05**: Role-appropriate navigation and layout for each user type
 
 ## v2 Requirements
@@ -93,8 +93,8 @@
 | Real-time chat/messaging | High complexity, not core to marina management |
 | Mobile native app | Web-first with responsive design covers tablet use |
 | Multi-marina support | Demo is single-marina; multi-tenant adds complexity |
-| Payment processing | Demo app — no real transactions needed |
-| Email sending | Demo app — notifications shown in-app only |
+| Payment processing | Demo app -- no real transactions needed |
+| Email sending | Demo app -- notifications shown in-app only |
 | GPS/location tracking | Not needed for slip management |
 
 ## Traceability
@@ -140,17 +140,17 @@
 | SEED-03 | Phase 1 | Pending |
 | SEED-04 | Phase 1 | Pending |
 | SEED-05 | Phase 1 | Pending |
-| UX-01 | Phase 5 | Pending |
-| UX-02 | Phase 5 | Pending |
-| UX-03 | Phase 5 | Pending |
-| UX-04 | Phase 5 | Pending |
-| UX-05 | Phase 5 | Pending |
+| UX-01 | Phase 1 | Pending |
+| UX-02 | Phase 1 | Pending |
+| UX-03 | Phase 1 | Pending |
+| UX-04 | Phase 2 | Pending |
+| UX-05 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 40 total
-- Mapped to phases: 40
+- Mapped to phases: 40 (across 4 phases)
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-03-24*
-*Last updated: 2026-03-24 after initial definition*
+*Last updated: 2026-03-24 after roadmap creation*
