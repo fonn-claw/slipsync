@@ -28,7 +28,7 @@ import { Separator } from "@/components/ui/separator";
 
 const navItems = [
   { title: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
-  { title: "Marina Map", href: "/admin/marina-map", icon: Map },
+  { title: "Marina Map", href: "/marina", icon: Map },
   { title: "Bookings", href: "/admin/bookings", icon: Calendar },
   { title: "Boaters", href: "/admin/boaters", icon: Users },
   { title: "Maintenance", href: "/admin/maintenance", icon: Wrench },

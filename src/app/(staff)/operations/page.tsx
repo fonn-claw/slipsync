@@ -1,35 +1,30 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Map } from "lucide-react";
+import { getSlipsWithDetails } from '@/lib/dal/slips';
+import { getSession } from '@/lib/auth';
+import { MarinaMap } from '@/components/marina-map/marina-map';
 
-export default function OperationsPage() {
+export default async function OperationsPage() {
+  const [session, slips] = await Promise.all([
+    getSession(),
+    getSlipsWithDetails(),
+  ]);
+
+  const total = slips.length;
+  const occupied = slips.filter((s) => s.status === 'occupied').length;
+  const available = slips.filter((s) => s.status === 'available').length;
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
-          Marina Operations
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
+          Operations &mdash; Marina Map
         </h1>
-        <p className="mt-1 text-muted-foreground">
-          Dock management and daily operations
+        <p className="text-sm text-muted-foreground">
+          {occupied} occupied &middot; {available} available &middot; {total} total slips
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Interactive Marina Map</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex flex-col items-center justify-center py-16 text-center">
-            <Map className="mb-4 h-12 w-12 text-muted-foreground/40" />
-            <h3 className="text-lg font-medium text-foreground">
-              Marina Map coming in Phase 2
-            </h3>
-            <p className="mt-1 max-w-md text-sm text-muted-foreground">
-              The interactive SVG marina map with color-coded slip statuses,
-              click-to-inspect details, and real-time occupancy will appear here.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Interactive marina map */}
+      <MarinaMap slips={slips} userRole={session.role} />
     </div>
   );
 }
