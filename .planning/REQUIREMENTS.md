@@ -70,9 +70,9 @@
 
 ### Design & UX
 
-- [ ] **UX-01**: Ocean/nautical color palette (navy blues, teals, seafoam, whites)
-- [ ] **UX-02**: Clean, modern, professional UI using shadcn/ui components
-- [ ] **UX-03**: Responsive design -- works on desktop and tablet
+- [x] **UX-01**: Ocean/nautical color palette (navy blues, teals, seafoam, whites)
+- [x] **UX-02**: Clean, modern, professional UI using shadcn/ui components
+- [x] **UX-03**: Responsive design -- works on desktop and tablet
 - [ ] **UX-04**: Marina map is the centerpiece -- large, prominent, interactive
 - [ ] **UX-05**: Role-appropriate navigation and layout for each user type
 
@@ -140,9 +140,9 @@
 | SEED-03 | Phase 1 | Complete |
 | SEED-04 | Phase 1 | Complete |
 | SEED-05 | Phase 1 | Complete |
-| UX-01 | Phase 1 | Pending |
-| UX-02 | Phase 1 | Pending |
-| UX-03 | Phase 1 | Pending |
+| UX-01 | Phase 1 | Complete |
+| UX-02 | Phase 1 | Complete |
+| UX-03 | Phase 1 | Complete |
 | UX-04 | Phase 2 | Pending |
 | UX-05 | Phase 4 | Pending |
 
