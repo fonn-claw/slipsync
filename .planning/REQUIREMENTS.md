@@ -11,7 +11,7 @@
 - [ ] **AUTH-02**: User session persists across browser refresh
 - [ ] **AUTH-03**: User can log out from any page
 - [ ] **AUTH-04**: Role-based access control enforced at API/middleware layer (admin, dock_staff, boater)
-- [ ] **AUTH-05**: Three demo accounts seeded (admin, dock staff, boater)
+- [x] **AUTH-05**: Three demo accounts seeded (admin, dock staff, boater)
 
 ### Marina Map
 
@@ -23,8 +23,8 @@
 
 ### Slip Management
 
-- [ ] **SLIP-01**: Each slip has defined dimensions (length, beam, draft capacity)
-- [ ] **SLIP-02**: Slips are organized by dock with size categories (small, medium, large, extra-large)
+- [x] **SLIP-01**: Each slip has defined dimensions (length, beam, draft capacity)
+- [x] **SLIP-02**: Slips are organized by dock with size categories (small, medium, large, extra-large)
 - [ ] **SLIP-03**: Slip status can be changed (available, occupied, reserved, maintenance)
 
 ### Booking System
@@ -62,11 +62,11 @@
 
 ### Demo Data & Seed
 
-- [ ] **SEED-01**: Seed script creates "Sunset Harbor Marina" with 4 docks and 60 slips
-- [ ] **SEED-02**: 15-20 boater accounts with registered vessels seeded
-- [ ] **SEED-03**: Mix of slip statuses: ~40% occupied, ~20% reserved, ~30% available, ~10% maintenance
-- [ ] **SEED-04**: Historical bookings going back 3 months (relative dates)
-- [ ] **SEED-05**: Waitlist entries and maintenance requests in various states seeded
+- [x] **SEED-01**: Seed script creates "Sunset Harbor Marina" with 4 docks and 60 slips
+- [x] **SEED-02**: 15-20 boater accounts with registered vessels seeded
+- [x] **SEED-03**: Mix of slip statuses: ~40% occupied, ~20% reserved, ~30% available, ~10% maintenance
+- [x] **SEED-04**: Historical bookings going back 3 months (relative dates)
+- [x] **SEED-05**: Waitlist entries and maintenance requests in various states seeded
 
 ### Design & UX
 
@@ -105,14 +105,14 @@
 | AUTH-02 | Phase 1 | Pending |
 | AUTH-03 | Phase 1 | Pending |
 | AUTH-04 | Phase 1 | Pending |
-| AUTH-05 | Phase 1 | Pending |
+| AUTH-05 | Phase 1 | Complete |
 | MAP-01 | Phase 2 | Pending |
 | MAP-02 | Phase 2 | Pending |
 | MAP-03 | Phase 2 | Pending |
 | MAP-04 | Phase 2 | Pending |
 | MAP-05 | Phase 2 | Pending |
-| SLIP-01 | Phase 1 | Pending |
-| SLIP-02 | Phase 1 | Pending |
+| SLIP-01 | Phase 1 | Complete |
+| SLIP-02 | Phase 1 | Complete |
 | SLIP-03 | Phase 2 | Pending |
 | BOOK-01 | Phase 3 | Pending |
 | BOOK-02 | Phase 3 | Pending |
@@ -135,11 +135,11 @@
 | MAINT-01 | Phase 4 | Pending |
 | MAINT-02 | Phase 4 | Pending |
 | MAINT-03 | Phase 4 | Pending |
-| SEED-01 | Phase 1 | Pending |
-| SEED-02 | Phase 1 | Pending |
-| SEED-03 | Phase 1 | Pending |
-| SEED-04 | Phase 1 | Pending |
-| SEED-05 | Phase 1 | Pending |
+| SEED-01 | Phase 1 | Complete |
+| SEED-02 | Phase 1 | Complete |
+| SEED-03 | Phase 1 | Complete |
+| SEED-04 | Phase 1 | Complete |
+| SEED-05 | Phase 1 | Complete |
 | UX-01 | Phase 1 | Pending |
 | UX-02 | Phase 1 | Pending |
 | UX-03 | Phase 1 | Pending |
