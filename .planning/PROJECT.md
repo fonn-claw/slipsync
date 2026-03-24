@@ -15,11 +15,10 @@ Marina operators can visually manage their slips, bookings, and boaters through 
 - ✓ Role-based auth: admin, dock_staff, boater — Validated in Phase 1
 - ✓ Demo accounts with realistic seed data (60 slips, 21 boaters, 3 months history) — Validated in Phase 1
 - ✓ Ocean/nautical design palette, responsive, tablet-friendly — Validated in Phase 1
+- ✓ Interactive visual marina map with 4 docks, 60 slips, color-coded by status — Validated in Phase 2
+- ✓ Click-to-inspect slip details with vessel info, booking history, and actions — Validated in Phase 2
 
 ### Active
-
-- [ ] Interactive visual marina map with 4 docks, 60 slips, color-coded by status
-- [ ] Click-to-inspect slip details with vessel info, booking history, and actions
 - [ ] Booking system with transient (daily/weekly) and seasonal reservations
 - [ ] Vessel size matching to slip dimensions (length, beam, draft)
 - [ ] Calendar view of slip/dock availability
@@ -72,4 +71,4 @@ Marina operators can visually manage their slips, bookings, and boaters through 
 | OKLCH color format | Modern color space, better for nautical palette gradations | ✓ Good |
 
 ---
-*Last updated: 2026-03-24 after Phase 1 completion*
+*Last updated: 2026-03-24 after Phase 2 completion*
