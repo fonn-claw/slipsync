@@ -32,6 +32,7 @@ import {
   AlertDialogFooter,
   AlertDialogCancel,
 } from '@/components/ui/alert-dialog';
+import Link from 'next/link';
 import {
   Anchor,
   Droplets,
@@ -292,10 +293,12 @@ export function SlipDetailPanel({ slip, userRole, onClose }: SlipDetailPanelProp
 
                 {/* Book this slip CTA */}
                 {slip.status === 'available' && (
-                  <Button disabled className="w-full" variant="outline">
-                    <Anchor className="mr-2 h-4 w-4" />
-                    Book this Slip (Coming Soon)
-                  </Button>
+                  <Link href={`/admin/bookings/new?slipId=${slip.id}`}>
+                    <Button className="w-full" variant="outline">
+                      <Anchor className="mr-2 h-4 w-4" />
+                      Book this Slip
+                    </Button>
+                  </Link>
                 )}
               </div>
             </>

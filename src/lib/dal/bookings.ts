@@ -56,6 +56,9 @@ export function createBookingTransaction(data: BookingInsert) {
 }
 
 // ── Transactional Status Update ───────────────────────────────────────────
+type BookingStatus = 'pending' | 'confirmed' | 'checked_in' | 'checked_out' | 'cancelled';
+type SlipStatus = 'available' | 'occupied' | 'reserved' | 'maintenance';
+
 export function updateBookingStatusTransaction(bookingId: number, newStatus: string) {
   const txn = sqlite.transaction(() => {
     const booking = db
@@ -78,7 +81,7 @@ export function updateBookingStatusTransaction(bookingId: number, newStatus: str
     const now = new Date().toISOString();
     const updated = db
       .update(bookings)
-      .set({ status: newStatus, updatedAt: now })
+      .set({ status: newStatus as BookingStatus, updatedAt: now })
       .where(eq(bookings.id, bookingId))
       .returning()
       .get();
@@ -87,7 +90,7 @@ export function updateBookingStatusTransaction(bookingId: number, newStatus: str
     const newSlipStatus = slipStatusForBooking(newStatus);
     if (newSlipStatus) {
       db.update(slips)
-        .set({ status: newSlipStatus })
+        .set({ status: newSlipStatus as SlipStatus })
         .where(eq(slips.id, booking.slipId))
         .run();
     }

@@ -19,7 +19,7 @@ export async function createBooking(input: CreateBookingInput) {
   // Validate input
   const parsed = createBookingSchema.safeParse(input);
   if (!parsed.success) {
-    return { success: false, error: parsed.error.errors[0].message };
+    return { success: false, error: parsed.error.issues[0].message };
   }
 
   const data = parsed.data;
@@ -80,12 +80,8 @@ export async function updateBookingStatus(bookingId: number, newStatus: string) 
 
   // Admin and staff can do all transitions
   // Boaters can only cancel their own pending/confirmed bookings
-  if (session.role === 'boater') {
-    if (newStatus !== 'cancelled') {
-      return { success: false, error: 'Boaters can only cancel bookings' };
-    }
-    // Verify ownership (checked inside transaction would be better, but keeping simple)
-    const booking = db.query.bookings.findFirst({ where: eq(db._.fullSchema.bookings.id, bookingId) });
+  if (session.role === 'boater' && newStatus !== 'cancelled') {
+    return { success: false, error: 'Boaters can only cancel bookings' };
   }
 
   if (session.role !== 'admin' && session.role !== 'dock_staff' && session.role !== 'boater') {
