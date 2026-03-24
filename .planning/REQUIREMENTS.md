@@ -18,14 +18,14 @@
 - [ ] **MAP-01**: Interactive SVG marina map displays 4 docks (A, B, C, D) with 60 total slips
 - [ ] **MAP-02**: Slips are color-coded by status: available (green), occupied (blue), reserved (yellow), maintenance (red)
 - [ ] **MAP-03**: Clicking a slip opens a details panel with vessel info, booking history, and actions
-- [ ] **MAP-04**: Map is data-driven (dock/slip layout from database, not hardcoded SVG)
+- [x] **MAP-04**: Map is data-driven (dock/slip layout from database, not hardcoded SVG)
 - [ ] **MAP-05**: Map is responsive and works on tablet screens
 
 ### Slip Management
 
 - [x] **SLIP-01**: Each slip has defined dimensions (length, beam, draft capacity)
 - [x] **SLIP-02**: Slips are organized by dock with size categories (small, medium, large, extra-large)
-- [ ] **SLIP-03**: Slip status can be changed (available, occupied, reserved, maintenance)
+- [x] **SLIP-03**: Slip status can be changed (available, occupied, reserved, maintenance)
 
 ### Booking System
 
@@ -109,11 +109,11 @@
 | MAP-01 | Phase 2 | Pending |
 | MAP-02 | Phase 2 | Pending |
 | MAP-03 | Phase 2 | Pending |
-| MAP-04 | Phase 2 | Pending |
+| MAP-04 | Phase 2 | Complete |
 | MAP-05 | Phase 2 | Pending |
 | SLIP-01 | Phase 1 | Complete |
 | SLIP-02 | Phase 1 | Complete |
-| SLIP-03 | Phase 2 | Pending |
+| SLIP-03 | Phase 2 | Complete |
 | BOOK-01 | Phase 3 | Pending |
 | BOOK-02 | Phase 3 | Pending |
 | BOOK-03 | Phase 3 | Pending |
