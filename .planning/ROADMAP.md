@@ -29,12 +29,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. Unauthorized users are redirected -- boater cannot access admin routes, staff cannot access admin-only features
   4. Database contains 60 slips across 4 docks with realistic dimensions, 15-20 boaters with vessels, and 3 months of historical data
   5. Application renders with ocean/nautical color palette using shadcn/ui components and works on tablet screens
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
-- [ ] 01-03: TBD
+- [ ] 01-01-PLAN.md -- Project scaffolding, Drizzle schema, database setup, and comprehensive seed script
+- [ ] 01-02-PLAN.md -- Authentication system with iron-session, login/logout, and middleware route protection
+- [ ] 01-03-PLAN.md -- Nautical OKLCH theme, shadcn/ui setup, and role-specific layout shells
 
 ### Phase 2: Interactive Marina Map
 **Goal**: Users see a stunning, interactive visual marina map as the application centerpiece -- the "wow" moment for LinkedIn
